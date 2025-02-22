@@ -3,8 +3,7 @@ import pickle
 import numpy as np
 
 # Load the trained model
-with open("new_model.pkl", "rb") as file:
-    model = pickle.load(file)
+model = joblib.load("new_model.pkl")
 
 # Title of the app
 st.title("Heart Attack Risk Predictor")
