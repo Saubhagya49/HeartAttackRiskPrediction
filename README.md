@@ -22,4 +22,4 @@ This project predicts the risk of heart attack using machine learning. The model
 
 ---
 📌 **Author:** Saubhagya Srivastava  
-🔗 [GitHub Profile]((https://github.com/Saubhagya49))
+🔗 [GitHub Profile](https://github.com/Saubhagya49)
