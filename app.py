@@ -2,31 +2,29 @@ import streamlit as st
 import joblib
 import numpy as np
 
-# Load the trained model
+# Load the trained SVM model
 model = joblib.load("new_model.pkl")
 
-# Title of the app
-st.title("Heart Attack Risk Predictor")
+# Streamlit UI
+st.title("Heart Attack Risk Prediction")
+st.write("Enter your health details to predict the risk of a heart attack.")
 
-# User input fields
-male = st.selectbox("Gender", ["Female", "Male"])
-age = st.number_input("Age", min_value=18, max_value=100, step=1)
-hypertension = st.selectbox("Hypertension", ["No", "Yes"])
-diabetes = st.selectbox("Diabetes", ["No", "Yes"])
-totChol = st.number_input("Total Cholesterol (mg/dL)", min_value=100.0, max_value=400.0, step=0.1)
-sysBP = st.number_input("Systolic Blood Pressure", min_value=80.0, max_value=200.0, step=0.1)
-diaBP = st.number_input("Diastolic Blood Pressure", min_value=50.0, max_value=130.0, step=0.1)
-BMI = st.number_input("Body Mass Index (BMI)", min_value=10.0, max_value=50.0, step=0.1)
-glucose = st.number_input("Glucose Level", min_value=50.0, max_value=300.0, step=0.1)
+# User inputs
+age = st.number_input("Age", min_value=18, max_value=100, value=40)
+sysBP = st.number_input("Systolic Blood Pressure (sysBP)", min_value=80, max_value=200, value=120)
+diaBP = st.number_input("Diastolic Blood Pressure (diaBP)", min_value=50, max_value=130, value=80)
+totChol = st.number_input("Total Cholesterol (totChol)", min_value=100, max_value=400, value=200)
+glucose = st.number_input("Glucose Level", min_value=50, max_value=300, value=100)
+BMI = st.number_input("Body Mass Index (BMI)", min_value=10.0, max_value=50.0, value=25.0)
+male = st.radio("Gender", ["Female", "Male"]) == "Male"
+diabetes = st.radio("Diabetes", ["No", "Yes"]) == "Yes"
+Hypertension = st.radio("Hypertension", ["No", "Yes"]) == "Yes"
 
-# Convert categorical inputs to numerical
-male = 1 if male == "Male" else 0
-hypertension = 1 if hypertension == "Yes" else 0
-diabetes = 1 if diabetes == "Yes" else 0
+# Convert inputs to array
+features = np.array([[age, sysBP, diaBP, totChol, glucose, BMI, male, diabetes, Hypertension]])
 
-# Predict button
+# Prediction
 if st.button("Predict Heart Attack Risk"):
-    features = np.array([[male, age, hypertension, diabetes, totChol, sysBP, diaBP, BMI, glucose]])
     prediction = model.predict(features)
     result = "High Risk" if prediction[0] == 1 else "Low Risk"
-    st.write(f"### Prediction: {result}")
+    st.subheader(f"Prediction: {result}")
