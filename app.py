@@ -2,8 +2,9 @@ import streamlit as st
 import joblib
 import numpy as np
 
-# Load the trained SVM model
+# Load the trained SVM model and scaler
 model = joblib.load("new_model.pkl")
+scaler = joblib.load("scaler.pkl")  # Load the scaler used during training
 
 # Streamlit UI
 st.title("Heart Attack Risk Prediction")
@@ -16,15 +17,16 @@ diaBP = st.number_input("Diastolic Blood Pressure (diaBP)", min_value=50, max_va
 totChol = st.number_input("Total Cholesterol (totChol)", min_value=100, max_value=400, value=200)
 glucose = st.number_input("Glucose Level", min_value=50, max_value=300, value=100)
 BMI = st.number_input("Body Mass Index (BMI)", min_value=10.0, max_value=50.0, value=25.0)
-male = st.radio("Gender", ["Female", "Male"]) == "Male"
-diabetes = st.radio("Diabetes", ["No", "Yes"]) == "Yes"
-Hypertension = st.radio("Hypertension", ["No", "Yes"]) == "Yes"
+male = int(st.radio("Gender", ["Female", "Male"]) == "Male")
+diabetes = int(st.radio("Diabetes", ["No", "Yes"]) == "Yes")
+Hypertension = int(st.radio("Hypertension", ["No", "Yes"]) == "Yes")
 
-# Convert inputs to array
+# Convert inputs to array and scale
 features = np.array([[age, sysBP, diaBP, totChol, glucose, BMI, male, diabetes, Hypertension]])
+features_scaled = scaler.transform(features)  # Apply the same scaling as training
 
 # Prediction
 if st.button("Predict Heart Attack Risk"):
-    prediction = model.predict(features)
-    result = "High Risk" if prediction[0] == 1 else "Low Risk"
+    prediction = model.predict(features_scaled)
+    result = "⚠️ High Risk" if prediction[0] == 1 else "✅ Low Risk"
     st.subheader(f"Prediction: {result}")
