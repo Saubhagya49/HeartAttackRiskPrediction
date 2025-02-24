@@ -21,12 +21,18 @@ male = int(st.radio("Gender", ["Female", "Male"]) == "Male")
 diabetes = int(st.radio("Diabetes", ["No", "Yes"]) == "Yes")
 Hypertension = int(st.radio("Hypertension", ["No", "Yes"]) == "Yes")
 
-# Convert inputs to array and scale
-features = np.array([[age, sysBP, diaBP, totChol, glucose, BMI, male, diabetes, Hypertension]])
-features_scaled = scaler.transform(features)  # Apply the same scaling as training
+# Convert inputs into a NumPy array
+num_features = np.array([[age, sysBP, diaBP, totChol, glucose, BMI]])  # Numeric values
+bin_features = np.array([[male, diabetes, Hypertension]])  # Binary values
+
+# Scale only numeric features
+num_features_scaled = scaler.transform(num_features)
+
+# Combine scaled numeric features with binary features
+final_features = np.hstack((num_features_scaled, bin_features))
 
 # Prediction
 if st.button("Predict Heart Attack Risk"):
-    prediction = model.predict(features_scaled)
+    prediction = model.predict(final_features)
     result = "⚠️ High Risk" if prediction[0] == 1 else "✅ Low Risk"
     st.subheader(f"Prediction: {result}")
