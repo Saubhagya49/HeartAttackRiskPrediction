@@ -1,7 +1,3 @@
-Here's your modified `README.md` with updated details about the **Streamlit app**, **best model (SVM)**, and **live demo link**:  
-
----
-
 # **Heart Attack Risk Prediction 🚑**  
 
 This project predicts the risk of a heart attack using **machine learning**. The model is trained on the **Framingham Heart Study dataset**, and the best-performing model is **SVM (Support Vector Machine)** with an **F1 score of 0.66**.
